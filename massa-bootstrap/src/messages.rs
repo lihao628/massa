@@ -4,8 +4,11 @@ use crate::settings::BootstrapServerMessageDeserializerArgs;
 use massa_consensus_exports::bootstrapable_graph::{
     BootstrapableGraph, BootstrapableGraphDeserializer, BootstrapableGraphSerializer,
 };
+
 use massa_db_exports::StreamBatch;
+
 use massa_models::block_id::{BlockId, BlockIdDeserializer, BlockIdSerializer};
+
 use massa_models::prehash::PreHashSet;
 use massa_models::serialization::{
     PreHashSetDeserializer, PreHashSetSerializer, VecU8Deserializer, VecU8Serializer,
@@ -23,6 +26,7 @@ use massa_serialization::{
     SerializeError, Serializer, U32VarIntDeserializer, U32VarIntSerializer, U64VarIntDeserializer,
     U64VarIntSerializer,
 };
+
 use massa_time::{MassaTime, MassaTimeDeserializer, MassaTimeSerializer};
 use nom::error::context;
 use nom::multi::{length_count, length_data};
@@ -33,6 +37,7 @@ use nom::{
     IResult,
 };
 use num_enum::{IntoPrimitive, TryFromPrimitive};
+
 use std::convert::TryInto;
 use std::ops::Bound::{Excluded, Included};
 

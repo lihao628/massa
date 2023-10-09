@@ -7,6 +7,7 @@ edition = "2021"
 [features]
 testing = ["massa_final_state/testing", "massa_ledger_worker/testing", "massa_consensus_exports/testing", "massa_async_pool/testing"]
 sandbox = ["massa_async_pool/sandbox", "massa_final_state/sandbox", "massa_models/sandbox"]
+heavy_testing = []
 
 [dependencies]
 displaydoc = {workspace = true}
