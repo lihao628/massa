@@ -201,19 +201,23 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions-rs/cargo@v1
         with:
-          command: install
-          args: cargo-nextest
-      - uses: actions-rs/cargo@v1
-        with:
-          command: nextest
-          args: run --features testing --retries 10
+          command: test
+          args: --features testing --doc
+
+      - uses: taiki-e/install-action@cargo-llvm-cov
+      - uses: taiki-e/install-action@nextest
       - uses: actions-rs/cargo@v1
         with:
           command: clean
+          args: --workspace
       - uses: actions-rs/cargo@v1
         with:
-          command: test
-          args: --features testing --doc
+          command: llvm-cov nextest
+          args: --features testing --retries 10 --workspace --lcov --output-path lcov.info
+      - uses: codecov/codecov-action@v3
+        with:
+          files: lcov.info
+          fail_ci_if_error: false
 
   build: # quick hack because bors wrongly detect matrix jobs status
     needs: full
