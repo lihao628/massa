@@ -208,10 +208,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: clean
-      - uses: actions-rs/cargo@v1
-        with:
-          command: llvm-cov nextest
-          args: --features testing --retries 10 --workspace --lcov --output-path lcov.info
+      - run: cargo llvm-cov nextest --features testing --retries 10 --workspace --lcov --output-path lcov.info
       - uses: codecov/codecov-action@v3
         with:
           files: lcov.info
