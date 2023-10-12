@@ -36,8 +36,8 @@ jobs:
           override: true
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: "sanity"
-          save-if: ${{ github.ref_name == 'testnet_26' }}
+          shared-key: "massa-cargo-cache"
+          save-if: false
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
@@ -59,7 +59,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           shared-key: "check"
-          save-if: ${{ github.ref_name == 'testnet_26' }}
+          save-if: ${{ github.ref_name == 'feature/test-coverage' }}
       - uses: actions-rs/cargo@v1
         with:
           command: check
@@ -81,8 +81,8 @@ jobs:
           override: true
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: "clippy"
-          save-if: ${{ github.ref_name == 'testnet_26' }}
+          shared-key: "massa-cargo-cache"
+          save-if: false
       - uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -183,13 +183,15 @@ jobs:
           profile: minimal
           toolchain: 1.72.1
           override: true
-      - uses: Swatinem/rust-cache@v2
-        with:
-          shared-key: "massa"
-          save-if: ${{ github.ref_name == 'testnet_26' }}
       - uses: taiki-e/install-action@cargo-llvm-cov
       - uses: taiki-e/install-action@nextest
-      - run: cargo llvm-cov nextest --features testing --retries 10 --workspace --lcov --output-path lcov.info
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: "massa-cargo-cache"
+          save-if: false
+          # cache-all-crates: true
+          # save-if: ${{ github.ref_name == 'feature/test-coverage' }}
+      - run: cargo llvm-cov nextest --profile ci --features testing --workspace --lcov --output-path lcov.info
       - uses: codecov/codecov-action@v3
         with:
           files: lcov.info
@@ -259,8 +261,8 @@ jobs:
           override: true
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: "doc"
-          save-if: ${{ github.ref_name == 'testnet_26' }}
+          shared-key: "massa-cargo-cache"
+          save-if: false
       - uses: actions-rs/cargo@v1
         with:
           command: doc
