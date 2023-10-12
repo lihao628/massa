@@ -60,10 +60,6 @@ jobs:
         with:
           shared-key: "check"
           save-if: ${{ github.ref_name == 'testnet_26' }}
-      - uses: arduino/setup-protoc@v1
-        with:
-          version: '3.x'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions-rs/cargo@v1
         with:
           command: check
@@ -87,10 +83,6 @@ jobs:
         with:
           shared-key: "clippy"
           save-if: ${{ github.ref_name == 'testnet_26' }}
-      - uses: arduino/setup-protoc@v1
-        with:
-          version: '3.x'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -195,24 +187,20 @@ jobs:
         with:
           shared-key: "massa"
           save-if: ${{ github.ref_name == 'testnet_26' }}
-      - uses: arduino/setup-protoc@v1
-        with:
-          version: '3.x'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --features testing --doc
       - uses: taiki-e/install-action@cargo-llvm-cov
       - uses: taiki-e/install-action@nextest
-      - uses: actions-rs/cargo@v1
-        with:
-          command: clean
       - run: cargo llvm-cov nextest --features testing --retries 10 --workspace --lcov --output-path lcov.info
       - uses: codecov/codecov-action@v3
         with:
           files: lcov.info
           fail_ci_if_error: false
+      - uses: actions-rs/cargo@v1
+        with:
+          command: clean
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --features testing --doc
 
   build: # quick hack because bors wrongly detect matrix jobs status
     needs: full
@@ -273,10 +261,6 @@ jobs:
         with:
           shared-key: "doc"
           save-if: ${{ github.ref_name == 'testnet_26' }}
-      - uses: arduino/setup-protoc@v1
-        with:
-          version: '3.x'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions-rs/cargo@v1
         with:
           command: doc
