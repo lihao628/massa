@@ -33,16 +33,7 @@ use massa_models::config::{
     MAX_LEDGER_CHANGES_COUNT, MAX_OPERATIONS_PER_BLOCK, MAX_OPERATION_DATASTORE_ENTRY_COUNT,
     MAX_OPERATION_DATASTORE_KEY_LENGTH, MAX_OPERATION_DATASTORE_VALUE_LENGTH, MAX_PARAMETERS_SIZE,
     MAX_PRODUCTION_STATS_LENGTH, MAX_ROLLS_COUNT_LENGTH, MIP_STORE_STATS_BLOCK_CONSIDERED,
-    PERIODS_PER_CYCLE, THREAD_COUNT,
-    MAX_ADVERTISE_LENGTH, MAX_BOOTSTRAPPED_NEW_ELEMENTS_SIZE, MAX_BOOTSTRAP_BLOCKS,
-    MAX_BOOTSTRAP_ERROR_LENGTH, MAX_BOOTSTRAP_FINAL_STATE_PARTS_SIZE, MAX_CONSENSUS_BLOCKS_IDS,
-    MAX_DATASTORE_ENTRY_COUNT, MAX_DATASTORE_KEY_LENGTH, MAX_DATASTORE_VALUE_LENGTH,
-    MAX_DEFERRED_CREDITS_LENGTH, MAX_DENUNCIATIONS_PER_BLOCK_HEADER,
-    MAX_DENUNCIATION_CHANGES_LENGTH, MAX_EXECUTED_OPS_CHANGES_LENGTH, MAX_EXECUTED_OPS_LENGTH,
-    MAX_FUNCTION_NAME_LENGTH, MAX_LEDGER_CHANGES_COUNT, MAX_OPERATIONS_PER_BLOCK,
-    MAX_OPERATION_DATASTORE_ENTRY_COUNT, MAX_OPERATION_DATASTORE_KEY_LENGTH,
-    MAX_OPERATION_DATASTORE_VALUE_LENGTH, MAX_PARAMETERS_SIZE, MAX_PRODUCTION_STATS_LENGTH,
-    MAX_ROLLS_COUNT_LENGTH, MIP_STORE_STATS_BLOCK_CONSIDERED, PERIODS_PER_CYCLE, THREAD_COUNT,
+    PERIODS_PER_CYCLE, THREAD_COUNT, MAX_BOOTSTRAP_FINAL_STATE_PARTS_SIZE,
 };
 use massa_models::denunciation::DenunciationIndex;
 use massa_models::node::NodeId;
@@ -603,7 +594,7 @@ where
     loop {
         let key = gen_random_vector(MAX_DATASTORE_KEY_LENGTH as usize, rng);
         let val = gen_random_vector(MAX_DATASTORE_VALUE_LENGTH as usize, rng);
-        if size + (key.len() as u64) + (val.len() as u64) > new_elements_size {
+        if size + (key.len() as u64) + (val.len() as u64) > new_elements_size.into() {
             break;
         }
         size += key.len() as u64;
@@ -621,7 +612,7 @@ where
         } else {
             None
         };
-        if (size + (s as u64)) > batch_size {
+        if (size + (s as u64)) > batch_size.into() {
             break;
         }
         size += s as u64;
@@ -774,7 +765,7 @@ impl BootstrapServerMessage {
                 for _ in 0..block_nb {
                     final_blocks.push(gen_export_active_blocks(rng));
                 }
-                let nb = rng.gen_range(0..100);
+                let nb = rng.gen_range(0..MAX_CONSENSUS_BLOCKS_IDS);
                 let mut consensus_outdated_ids = PreHashSet::default();
                 for _ in 0..nb {
                     consensus_outdated_ids.insert(gen_random_block_id(rng));
