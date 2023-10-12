@@ -148,27 +148,23 @@ fn test_binders_simple() {
 
     let server_thread = std::thread::Builder::new()
         .name("test_binders_remake::server_thread".to_string())
-        .spawn(move || {
-            loop {
-                srv_ready_flag.send(true).unwrap();
-                let (srv_send_msg, cli_recv_msg) = srv_recv.recv_timeout(timeout).unwrap();
-                server.send_timeout(srv_send_msg, Some(timeout)).unwrap();
-                assert_server_got_msg(timeout, &mut server, cli_recv_msg);
-            }
+        .spawn(move || loop {
+            srv_ready_flag.send(true).unwrap();
+            let (srv_send_msg, cli_recv_msg) = srv_recv.recv_timeout(timeout).unwrap();
+            server.send_timeout(srv_send_msg, Some(timeout)).unwrap();
+            assert_server_got_msg(timeout, &mut server, cli_recv_msg);
         })
         .unwrap();
 
     let client_thread = std::thread::Builder::new()
         .name("test_binders_remake::client_thread".to_string())
-        .spawn(move || {
-            loop {
-                cli_ready_flag.send(true).unwrap();
-                let (srv_recv_msg, cli_send_msg) = cli_recv
-                    .recv_timeout(timeout)
-                    .expect("Unable to receive next message");
-                assert_client_got_msg(timeout, &mut client, srv_recv_msg);
-                client.send_timeout(&cli_send_msg, Some(timeout)).unwrap();
-            }
+        .spawn(move || loop {
+            cli_ready_flag.send(true).unwrap();
+            let (srv_recv_msg, cli_send_msg) = cli_recv
+                .recv_timeout(timeout)
+                .expect("Unable to receive next message");
+            assert_client_got_msg(timeout, &mut client, srv_recv_msg);
+            client.send_timeout(&cli_send_msg, Some(timeout)).unwrap();
         })
         .unwrap();
 
