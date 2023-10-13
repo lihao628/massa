@@ -4,7 +4,6 @@ use crate::settings::{BootstrapClientConfig, BootstrapSrvBindCfg};
 use crate::{
     bindings::{BootstrapClientBinder, BootstrapServerBinder},
     tests::tools::get_bootstrap_config,
-    BootstrapPeers,
 };
 use crate::{BootstrapConfig, BootstrapError};
 use massa_models::config::{
@@ -20,13 +19,13 @@ use massa_models::config::{
 };
 use massa_models::node::NodeId;
 use massa_models::version::Version;
-use massa_protocol_exports::{PeerId, TransportType};
+
 use massa_signature::{KeyPair, PublicKey};
 use massa_time::MassaTime;
 
 use rand::Rng;
 use serial_test::serial;
-use std::collections::HashMap;
+
 use std::io::Write;
 use std::net::TcpStream;
 use std::str::FromStr;
